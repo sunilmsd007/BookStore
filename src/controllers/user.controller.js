@@ -33,3 +33,17 @@ export const login = async (req, res, next) => {
   next(error);
 }
 }
+
+//forgot password
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const data = await UserService.forgotPassword(req.body);
+    res.status(HttpStatus.ACCEPTED).json({
+      code: HttpStatus.ACCEPTED,
+      data: data,
+      message: "link to reset password sent to your email "
+    });
+}catch (error) {
+  next(error);
+}
+}

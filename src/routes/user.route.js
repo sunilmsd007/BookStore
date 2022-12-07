@@ -10,4 +10,7 @@ router.post('', newUserValidator, userController.newUser);
 //route to login a single user
 router.post('/login', LoginValidator,userController.login);
 
+//route to forgot password
+router.post('/forgotpwd', userController.forgotPassword);
+
 export default router;
