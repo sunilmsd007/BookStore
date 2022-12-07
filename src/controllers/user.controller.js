@@ -19,3 +19,17 @@ export const newUser = async (req, res, next) => {
     next(error);
   }
 };
+
+//user login
+export const login = async (req, res, next) => {
+  try {
+    const data = await UserService.login(req.body);
+    res.status(HttpStatus.ACCEPTED).json({
+      code: HttpStatus.ACCEPTED,
+      data: data,
+      message: "user login successfully "
+    });
+}catch (error) {
+  next(error);
+}
+}
