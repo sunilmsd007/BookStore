@@ -43,3 +43,18 @@ export const forgotPassword = async (body) => {
     throw new Error("Invalid Email");
   }
 };
+
+//reset password
+export const resetPassword = async (body) => {
+  const saltRounds = 10;
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const hash = bcrypt.hashSync(body.password, salt);
+  const data = await User.findOneAndUpdate({
+    email: body.email
+    },
+    {password: hash},
+    {
+      new: true
+    });
+  return data;
+};
