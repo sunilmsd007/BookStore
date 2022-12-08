@@ -9,3 +9,13 @@ export const getAllBooks = async () => {
         throw new Error('No books are available');
     }
 }
+
+//get book by id
+export const getBookById = async (_id) => {
+    const data = await Book.findOne({ _id: _id });
+    if (data != null) {
+        return data;
+    } else {
+        throw new Error('No books are available with this id');
+    }
+}

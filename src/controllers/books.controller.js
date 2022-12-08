@@ -22,3 +22,20 @@ export const getAllBooks = async (req, res, next) => {
         });
     }
 };
+
+//get book by id
+export const getBookById = async (req, res, next) => {
+    try {
+        const data = await BookService.getBookById(req.params._id);
+        res.status(HttpStatus.OK).json({
+            code: HttpStatus.OK,
+            data: data,
+            message: 'Book fetched successfully'
+        });
+    } catch (error) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+            code: HttpStatus.BAD_REQUEST,
+            message: `${error}`
+        });
+    }
+};
