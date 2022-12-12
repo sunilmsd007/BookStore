@@ -1,14 +1,11 @@
 import Cart from '../models/cart.model';
 import Book from '../models/books.model';
 
-//add to cart
+//add book to cart
 export const addToCart = async (body) => {
-    console.log("body============>", body)
     const bookData = await Book.findOne({ _id: body._id });
-    console.log("bookdata============>", bookData)
     if (bookData != null) {
         const cartExist = await Cart.findOne({ userId: body.userId });
-        console.log("cart============>", cartExist)
         let bookExist = false;
         let totalCartPrice = 0;
         let addBook = {
@@ -19,7 +16,6 @@ export const addToCart = async (body) => {
             author: bookData.author,
             price: bookData.price
         };
-
         if (cartExist == null) {
             const createCart = await Cart.create({ userId: body.userId, books: [addBook], cart_total: addBook.price });
             return createCart;
@@ -54,10 +50,9 @@ export const addToCart = async (body) => {
     }
 };
 
-//remove from cart
+//remove book from cart
 export const removeFromCart = async (body) => {
     const cartExist = await Cart.findOne({ userId: body.userId });
-    console.log("cart============>", cartExist)
     let bookExist = false;
     let totalCartPrice = 0;
     let removeBook;
@@ -80,13 +75,63 @@ export const removeFromCart = async (body) => {
         if (bookExist == true) {
             const updateCart = await Cart.findOneAndUpdate(
                 { _id: cartExist._id },
-                { $pull: { books: removeBook },cart_total: totalCartPrice },
+                { $pull: { books: removeBook }, cart_total: totalCartPrice },
                 { new: true }
             );
             return updateCart;
         } else {
             throw new Error("Book is not available in cart")
         }
+    } else {
+        throw new Error("Cart doesn't exist")
+    }
+};
 
+//remove book one by one from cart 
+export const reduceBookQuantityFromCart = async (body) => {
+    const cartExist = await Cart.findOne({ userId: body.userId });
+    let bookExist = false;
+    let totalCartPrice = 0;
+    let removeBook;
+    let bookQuantity;
+    if (cartExist != null) {
+        const bookfind = cartExist.books.forEach(element => {
+            if (element.productId == body._id) {
+                removeBook = {
+                    productId: element.productId,
+                    description: element.description,
+                    bookName: element.bookName,
+                    bookImage: element.bookImage,
+                    author: element.author,
+                    price: element.price
+                };
+                element.quantity = element.quantity - 1;
+                bookQuantity = element.quantity;
+                totalCartPrice = cartExist.cart_total - element.price;
+                bookExist = true;
+            }
+        });
+        if (bookExist == true) {
+            if (bookQuantity == 0) {
+                const updateCart = await Cart.findOneAndUpdate(
+                    { _id: cartExist._id },
+                    { $pull: { books: removeBook }, cart_total: totalCartPrice },
+                    { new: true }
+                );
+                return updateCart;
+            } else {
+                const updateCart = await Cart.findOneAndUpdate(
+                    { _id: cartExist._id },
+                    { books: cartExist.books, cart_total: totalCartPrice },
+                    { new: true }
+                );
+                return updateCart;
+            }
+
+        } else {
+            throw new Error("Book is not available in cart")
+        }
+    } else {
+        throw new Error("Cart doesn't exist")
     }
 };

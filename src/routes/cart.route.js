@@ -10,4 +10,7 @@ router.post('', userAuthForCart, cartController.addToCart);
 //route to remove book from cart
 router.post('/removebook', userAuthForCart, cartController.removeFromCart);
 
+//route to remove book one by one from cart
+router.post('/reducebook', userAuthForCart, cartController.reduceBookQuantityFromCart);
+
 export default router;
