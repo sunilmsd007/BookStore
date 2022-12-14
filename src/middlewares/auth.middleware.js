@@ -28,7 +28,7 @@ export const userAuth = async (req, res, next) => {
 };
 
 //userAuth for cart
-export const userAuthForCart = async (req, res, next) => {
+export const userIdAuth = async (req, res, next) => {
   try {
     let bearerToken = req.header('Authorization');
     if (!bearerToken)
