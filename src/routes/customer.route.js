@@ -4,7 +4,7 @@ import { userIdAuth } from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
-//route to add book to wishlist
+//route to add customer details
 router.post('', userIdAuth, customerController.addCustomerDetails);
 
 export default router;
