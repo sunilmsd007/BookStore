@@ -1,1 +1,1 @@
-**Book Store app**
+**Book Store application**
