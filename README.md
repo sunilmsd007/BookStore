@@ -1,1 +1,1 @@
-**Book Store application practice**
+**Book Store application**
